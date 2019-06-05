@@ -99,6 +99,7 @@ class Message
         foreach ($attachs as $attach) {
             $this->messageObj->attach(Attachment::make(...array_values($attach))->getAttachment());
         }
+        return $this;
     }
 
     /**
