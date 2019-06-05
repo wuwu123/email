@@ -18,7 +18,7 @@ class Attachment
      */
     public static function make($file, $type, $fileName = '')
     {
-        if (file_exists($file)) {
+        if (!file_exists($file)) {
             throw new \Exception("无效的附件地址");
         }
         $model = new self();
