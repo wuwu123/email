@@ -1,0 +1,24 @@
+{
+    "name": "wujie/wj-mail",
+    "description": "邮件工具包",
+    "type": "library",
+    "require": {
+        "php": ">=7.1",
+        "swiftmailer/swiftmailer": "^6.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "武杰",
+            "email": "1224805548@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "wu\\Mail\\": "src/"
+        }
+    }
+}
