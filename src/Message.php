@@ -32,13 +32,13 @@ class Message
         return $this;
     }
 
-    public function setHtmlBody(string $body, $add = true)
+    public function setHtmlBody(string $body)
     {
         $this->addBody($body, "text/html");
         return $this;
     }
 
-    public function setBody(string $body, $type = null, $add = true)
+    public function setBody(string $body, $type = null)
     {
         $this->addBody($body, $type);
         return $this;
@@ -51,11 +51,10 @@ class Message
      */
     private function addBody($body, $contentType)
     {
-        $message = $this->messageObj;
-        $oldBody = $message->getBody();
-        $charset = $message->getCharset();
+        $oldBody = $this->messageObj->getBody();
+        $charset = $this->messageObj->getCharset();
         if (empty($oldBody)) {
-            $parts = $message->getChildren();
+            $parts = $this->messageObj->getChildren();
             $partFound = false;
             foreach ($parts as $key => $part) {
                 if (!($part instanceof \Swift_Mime_Attachment)) {
@@ -70,20 +69,21 @@ class Message
             }
             if ($partFound) {
                 reset($parts);
-                $message->setChildren($parts);
-                $message->addPart($body, $contentType, $charset);
+                $this->messageObj->setChildren($parts);
+                $this->messageObj->addPart($body, $contentType, $charset);
             } else {
-                $message->setBody($body, $contentType);
+                $this->messageObj->setBody($body, $contentType);
             }
         } else {
-            $oldContentType = $message->getContentType();
+            $oldContentType = $this->messageObj->getContentType();
             if ($oldContentType == $contentType) {
-                $message->setBody($body, $contentType);
+                $this->messageObj->setBody($body, $contentType);
             } else {
-                $message->setBody(null);
-                $message->setContentType(null);
-                $message->addPart($oldBody, $oldContentType, $charset);
-                $message->addPart($body, $contentType, $charset);
+                $this->messageObj->setBody(null);
+                $this->messageObj->setContentType(null);
+                //指定文件的输出类型
+                $this->messageObj->addPart($oldBody, $oldContentType, $charset);
+                $this->messageObj->addPart($body, $contentType, $charset);
             }
         }
     }
@@ -92,6 +92,7 @@ class Message
     /**
      * 设置附件
      * @param array $attachs [[file_path , file_type , file_name]]
+     * @return $this
      * @throws \Exception
      */
     public function setAttach(array $attachs)
@@ -133,10 +134,10 @@ class Message
 
     /**
      * 设置回执
-     * @param string $to
+     * @param array $to
      * @return $this
      */
-    public function setReadReceiptTo(string $to)
+    public function setReadReceiptTo(array $to)
     {
         $this->messageObj->setReadReceiptTo($to);
         return $this;
